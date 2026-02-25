@@ -31,6 +31,12 @@ const NavBar = () => {
         <li>
           <NavLink to="/coverage">Coverage</NavLink>
         </li>
+
+        {user && (
+          <>
+            <NavLink to="/dashboard/my-parcels">My Parcels</NavLink>
+          </>
+        )}
       </>
     );
 

@@ -2,9 +2,20 @@ import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth';
 
 const SendParcel = () => {
-    const { register, handleSubmit, control, formState:{errors}} = useForm();
+    const {
+      register,
+      handleSubmit,
+      control,
+      // formState:{errors}
+    } = useForm();
+    const {user} = useAuth();
+
+    const axiosSecure = useAxiosSecure();
+
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
     const regions = [...new Set(regionsDuplicate)];
@@ -19,7 +30,6 @@ const SendParcel = () => {
       return districts;
     }
 
-
     console.log(regions);
 
     const handleSendParcel = data =>{
@@ -27,7 +37,7 @@ const SendParcel = () => {
     const isDocument = data.parcelType === 'document';
     const isSameDistrict = data.senderDistrict === data.receiverDistrict;
     const parcelWeight = parseFloat(data.parcelWeight);
-    
+
     let cost = 0;
     if (isDocument){
       cost = isSameDistrict ? 60 : 80;
@@ -43,7 +53,10 @@ const SendParcel = () => {
         cost = minCharge + extraCharge ;
       }
     }
+
     console.log('cost', cost);
+    data.cost = cost;
+
     Swal.fire({
       title: "Agree with the Cost?",
       text: `You well be charged ${cost} taka!`,
@@ -54,7 +67,11 @@ const SendParcel = () => {
       confirmButtonText: "I agree!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // a
+        // save the parcel info to database
+        axiosSecure.post('/parcels', data)
+        .then(res =>{
+          console.log('after saving parcel',res.data);
+        })
 
         // Swal.fire({
         //   title: "Deleted!",
@@ -64,9 +81,7 @@ const SendParcel = () => {
       }
     });
 
-
     }
-
 
     return (
       <div>
@@ -131,6 +146,7 @@ const SendParcel = () => {
               <input
                 type="text"
                 {...register("senderName")}
+                defaultValue={user?.displayName}
                 className="input w-full"
                 placeholder="Sender name"
               />
@@ -139,6 +155,7 @@ const SendParcel = () => {
               <input
                 type="text"
                 {...register("senderEmail")}
+                defaultValue={user?.email}
                 className="input w-full"
                 placeholder="Sender Email"
               />
@@ -173,7 +190,7 @@ const SendParcel = () => {
 
                   {districtsByRegion(senderRegion).map((r, i) => (
                     <option key={i} value={r}>
-                      {r}{" "}
+                      {r}
                     </option>
                   ))}
                 </select>
