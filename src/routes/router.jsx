@@ -6,7 +6,7 @@ import AuthLayout from "../layout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
 import Register from "../page/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
-import Rider from "../page/Rider/Rider";
+
 import SendParcel from "../page/SendParcel/SendParcel";
 import DashboardLayout from "../layout/DashboardLayout";
 import MyParcels from "../page/Dashboard/MyParcels/MyParcels";
@@ -14,6 +14,7 @@ import Payment from "../page/Dashboard/Payment/Payment";
 import PaymentSuccess from "../page/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelles from "../page/Dashboard/Payment/PaymentCancelles";
 import PaymentHistory from "../page/Dashboard/PaymentHistory/PaymentHistory";
+import Rider from "../page/Rider/Rider";
 
 export const router = createBrowserRouter([
   {
@@ -31,13 +32,15 @@ export const router = createBrowserRouter([
             <Rider></Rider>
           </PrivateRoute>
         ),
+        loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
       },
       {
         path: "send-parcel",
-        element:
+        element: (
           <PrivateRoute>
             <SendParcel></SendParcel>
-          </PrivateRoute>,
+          </PrivateRoute>
+        ),
         loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
       },
       {
@@ -62,30 +65,33 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
-    element: <PrivateRoute><DashboardLayout></DashboardLayout> </PrivateRoute>,
-    children:[
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>{" "}
+      </PrivateRoute>
+    ),
+    children: [
       {
-        path: 'my-parcels',
-        Component: MyParcels
+        path: "my-parcels",
+        Component: MyParcels,
       },
       {
-        path: 'payment/:parcelId',
+        path: "payment/:parcelId",
         Component: Payment,
       },
       {
-        path: 'payment-history',
+        path: "payment-history",
         Component: PaymentHistory,
       },
       {
-        path: 'payment-success',
+        path: "payment-success",
         Component: PaymentSuccess,
-      
       },
       {
-        path: 'payment-cancelled',
+        path: "payment-cancelled",
         Component: PaymentCancelles,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ]);
