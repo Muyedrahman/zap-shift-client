@@ -3,6 +3,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { data, useLoaderData } from 'react-router';
+import Swal from 'sweetalert2';
 
 const Rider = () => {
      const {
@@ -34,6 +35,19 @@ const Rider = () => {
 
         const handleRiderApplication = data => {
             console.log(data);
+
+            axiosSecure.post('/riders', data)
+            .then(res => {
+                if (res.data.insertedId){
+             Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your application has been submittes. wi will reach to you in 145 days",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        });
+                }
+            })
         }
     return (
       <div>
