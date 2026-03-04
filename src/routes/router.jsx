@@ -6,7 +6,6 @@ import AuthLayout from "../layout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
 import Register from "../page/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
-
 import SendParcel from "../page/SendParcel/SendParcel";
 import DashboardLayout from "../layout/DashboardLayout";
 import MyParcels from "../page/Dashboard/MyParcels/MyParcels";
