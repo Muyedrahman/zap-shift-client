@@ -32,7 +32,7 @@ const ApproveRiders = () => {
     }
 
     const handleApproval = rider => {
-      updateRiderStatus(rider, 'approved');
+      updateRiderStatus(rider, "approved");
         
     }
     const handleRejection = rider =>{
