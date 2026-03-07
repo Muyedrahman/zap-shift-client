@@ -18,6 +18,8 @@ const UsersManagement = () => {
 
   const handleMakeUser = user => {
     const roleInfo = { role: "admin" };
+    // TODO: must ask for confirmation before parceed
+
     axiosSecure.patch(`/users/${user._id}`, roleInfo)
     .then((res) => {
         console.log(res.data)
@@ -35,18 +37,18 @@ const UsersManagement = () => {
   };
 
   const handleRemoveAdmin = user =>{
-    const roleInfo = {role: 'user'}
-    axiosSecure.patch(`/users/${user._id}`, roleInfo)
-    .then(res => {
-        refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user.displayName} removed form Admin`,
-          showConfirmButton: false,
-          timer: 2000,
-        });
-    })
+    const roleInfo = { role: "user" };
+    // TODO: must ask for confirmation before parceed
+    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+      refetch();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `${user.displayName} removed form Admin`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    });
   }
 
   return (
