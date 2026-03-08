@@ -52,6 +52,8 @@ const ApproveRiders = () => {
                 <th>Name</th>
                 <th>Email</th>
                 <th>District</th>
+                <th>Application Status</th>
+                <th>Work Status</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -64,7 +66,6 @@ const ApproveRiders = () => {
                   <td>{rider.email}</td>
                   <td>{rider.district}</td>
                   <td>
-                    
                     <p
                       className={`${
                         rider.status === "approved"
@@ -75,12 +76,10 @@ const ApproveRiders = () => {
                       {rider.status}
                     </p>
                   </td>
+                  <td>{rider.workStatus}</td>
 
                   <td>
-                    <button
-                     
-                      className="btn"
-                    >
+                    <button className="btn">
                       <FaEye></FaEye>
                     </button>
                     <button
@@ -89,9 +88,10 @@ const ApproveRiders = () => {
                     >
                       <FaUserCheck />
                     </button>
-                    <button 
-                    onClick={() => handleRejection(rider)}
-                    className="btn">
+                    <button
+                      onClick={() => handleRejection(rider)}
+                      className="btn"
+                    >
                       <IoPersonRemove />
                     </button>
                     <button className="btn">
