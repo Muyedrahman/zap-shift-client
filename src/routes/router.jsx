@@ -18,6 +18,7 @@ import ApproveRiders from "../page/Dashboard/ApproveRiders/ApproveRiders";
 import UsersManagement from "../page/Dashboard/UsersManagement/UsersManagement";
 import AdminRoute from "./AdminRoute";
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -70,7 +71,7 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: (
       <PrivateRoute>
-        <DashboardLayout></DashboardLayout>{" "}
+        <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
     children: [
@@ -92,21 +93,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "payment-cancelled",
-        element: <AdminRoute> <UsersManagement></UsersManagement> </AdminRoute> ,
+        Component: PaymentCancelles ,
        
       },
       {
         path: "approve-riders",
-        Component: ApproveRiders,
+       element: <AdminRoute><ApproveRiders></ApproveRiders> </AdminRoute>
       },
       {
         path: "users-management",
-        element: (
-          <AdminRoute>
-            
-            <UsersManagement></UsersManagement>
-          </AdminRoute>
-        ),
+        element: <AdminRoute> <UsersManagement></UsersManagement> </AdminRoute>
+        
       },
     ],
   },
