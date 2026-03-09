@@ -1,14 +1,17 @@
 import React, { useRef, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const AssignRiders = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
+  // console.log(selectedParcel?.senderDistrict);
+
   const axiosSecure = useAxiosSecure();
   const riderModalRef = useRef();
 
-  const { data: parcels = [] } = useQuery({
-    queryKey: ["parcels", "pending-pockup"],
+  const { data: parcels = [], refetch: parcelsRefetch } = useQuery({
+    queryKey: ["parcels", "pending-pickup"],
     queryFn: async () => {
       const res = await axiosSecure.get(
         "/parcels?deliveryStatus=pending-pickup",
@@ -18,29 +21,57 @@ const AssignRiders = () => {
   });
 
   const { data: riders = [] } = useQuery({
-    queryKey: ["riders", selectedParcel?.senderDistrict, "available"], //senderDistrict
+    queryKey: ["riders", selectedParcel?.senderDistrict, "available"], //sender District
     enabled: !!selectedParcel,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/riders?status=approved&
-district=${selectedParcel.senderDistrict}&workStatus=available`);
+      const res = await axiosSecure.get(
+        `/riders?status=approved&district=${selectedParcel.senderDistrict}&workStatus=available`,
+      );
       return res.data;
     },
   });
 
+  // const { data: riders = [] } = useQuery({
+  //   queryKey: ["riders", selectedParcel?._id], // use parcel _id for uniqueness
+  //   enabled: !!selectedParcel,
+  //   queryFn: async () => {
+  //     if (!selectedParcel) return [];
+  //     const res = await axiosSecure.get(
+  //       `/riders?status=approved&district=${selectedParcel.senderDistrict}&workStatus=available`,
+  //     );
+  //     return res.data;
+  //   },
+  // });
+
   const openAssignRiderModal = (parcel) => {
+    console.log(parcel);
     setSelectedParcel(parcel);
     riderModalRef.current.showModal();
   };
 
-  const handleAssignRider = rider =>{
+  const handleAssignRider = (rider) => {
     const riderAssignInfo = {
-        riderId: rider._id,
-        riderEmail: rider.email,
-        riderName: rider.name,
-        parcelId: selectedParcel._id,
-    }
-    axiosSecure.patch(``, riderAssignInfo)
-  }
+      riderId: rider._id,
+      riderEmail: rider.email,
+      riderName: rider.name,
+      parcelId: selectedParcel._id,
+    };
+    axiosSecure
+      .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          riderModalRef.current.close();
+          parcelsRefetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `Rider has been assigned .`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
 
   return (
     <div>
@@ -71,7 +102,7 @@ district=${selectedParcel.senderDistrict}&workStatus=available`);
                     onClick={() => openAssignRiderModal(parcel)}
                     className="btn btn-primary text-black"
                   >
-                    Assign Rider
+                    Find Riders
                   </button>
                 </td>
               </tr>
@@ -117,9 +148,6 @@ district=${selectedParcel.senderDistrict}&workStatus=available`);
             </table>
           </div>
 
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p>
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
