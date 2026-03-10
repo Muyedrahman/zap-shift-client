@@ -97,6 +97,13 @@ export const router = createBrowserRouter([
         Component: PaymentCancelles ,
        
       },
+      // Rider Only Routes
+      {
+        path: 'assigned-deliveries'
+      },
+
+
+      // Admin Only Routes
       {
         path: "approve-riders",
        element: <AdminRoute><ApproveRiders></ApproveRiders> </AdminRoute>
