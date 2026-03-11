@@ -19,8 +19,11 @@ const AssignedDeliveries = () => {
     },
   });
 
-  const handleAcceptDelivery = (parcel) => {
-    const statusInfo = { deliveryStatus: "rider_arriving" };
+  const handleDeliveryStatusUpdate = (parcel, status) => {
+
+    let message = `Parcel Status is updated with ${status.split('_').join(' ')} .`
+
+    const statusInfo = { deliveryStatus: status };
     axiosSecure
       .patch(`/parcels/${parcel._id}/status`, statusInfo)
       .then((res) => {
@@ -29,7 +32,7 @@ const AssignedDeliveries = () => {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: `Thank you for accepting .`,
+            title: message ,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -58,23 +61,38 @@ const AssignedDeliveries = () => {
                 <th>{i + 1}</th>
                 <td>{parcel.parcelName}</td>
                 <td>
-                  {
-                  parcel.deliveryStatus === "driver_assigned"
-                 ? <>
-                    <button
-                    onClick={() => handleAcceptDelivery(parcel)}
+                  {parcel.deliveryStatus === "driver_assigned" ? (
+                    <>
+                      <button
+                        onClick={() =>
+                          handleDeliveryStatusUpdate(parcel, 'rider_arriving')
+                        }
+                        className="btn btn-primary text-black"
+                      >
+                        Accept
+                      </button>
+                      <button className="btn btn-warning ms-2 text-black">
+                        Riject
+                      </button>
+                    </>
+                  ) : (
+                    <span>Accepted</span>
+                  )}
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
                     className="btn btn-primary text-black"
                   >
-                    Accept
+                    Mark as Picked up
                   </button>
-                  <button className="btn btn-warning ms-2 text-black">
-                    Riject
+
+                  <button
+                    onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
+                    className="btn btn-primary text-black mx-2"
+                  >
+                    Mark as Deliverd
                   </button>
-                  </>
-                  :
-                  <span>Accepted</span>
-                  }
-                
                 </td>
               </tr>
             ))}
