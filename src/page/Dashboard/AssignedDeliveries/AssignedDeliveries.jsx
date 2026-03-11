@@ -20,10 +20,13 @@ const AssignedDeliveries = () => {
   });
 
   const handleDeliveryStatusUpdate = (parcel, status) => {
+    const statusInfo = { 
+      deliveryStatus: status ,
+      riderId: parcel.riderId,
+    };
 
-    let message = `Parcel Status is updated with ${status.split('_').join(' ')} .`
+    let message = `Parcel Status is updated with ${status.split("_").join(" ")} .`;
 
-    const statusInfo = { deliveryStatus: status };
     axiosSecure
       .patch(`/parcels/${parcel._id}/status`, statusInfo)
       .then((res) => {
@@ -32,7 +35,7 @@ const AssignedDeliveries = () => {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: message ,
+            title: message,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -65,7 +68,7 @@ const AssignedDeliveries = () => {
                     <>
                       <button
                         onClick={() =>
-                          handleDeliveryStatusUpdate(parcel, 'rider_arriving')
+                          handleDeliveryStatusUpdate(parcel, "rider_arriving")
                         }
                         className="btn btn-primary text-black"
                       >
@@ -81,14 +84,18 @@ const AssignedDeliveries = () => {
                 </td>
                 <td>
                   <button
-                    onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
+                    onClick={() =>
+                      handleDeliveryStatusUpdate(parcel, "parcel_picked_up")
+                    }
                     className="btn btn-primary text-black"
                   >
                     Mark as Picked up
                   </button>
 
                   <button
-                    onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
+                    onClick={() =>
+                      handleDeliveryStatusUpdate(parcel, "parcel_delivered")
+                    }
                     className="btn btn-primary text-black mx-2"
                   >
                     Mark as Deliverd
