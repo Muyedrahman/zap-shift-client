@@ -61,6 +61,7 @@ const MyParcels = () => {
       parcelId: parcel._id,
       senderEmail: parcel.senderEmail,
       parcelName: parcel.parcelName,
+      trackingId: parcel.trackingId,
     }
     const res = await axiosSecure.post(
       "/payment-checkout-session",
