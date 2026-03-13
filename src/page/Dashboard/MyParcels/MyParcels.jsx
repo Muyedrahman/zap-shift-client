@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { use } from "react";
 import useAuth from "../../../hooks/useAuth";
-import { concat } from "firebase/firestore/pipelines";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaEdit } from "react-icons/fa";
 import { FaMagnifyingGlass, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { Link } from "react-router";
-import axios from "axios";
+
+
 
 const MyParcels = () => {
   const { user } = useAuth();
