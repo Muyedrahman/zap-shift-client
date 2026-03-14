@@ -18,12 +18,13 @@ const Coverage = () => {
       const coord = [district.latitude, district.longitude];
       console.log(district, coord)
       // goo to the lopcation
+
       mapRef.current.flyTo(coord, 14)
     }
   };
 
   return (
-    <div>
+    <div className="p-8">
       <h2 className="text-5xl">We are available in 64 districts</h2>
       <div>
         {/* searce  */}

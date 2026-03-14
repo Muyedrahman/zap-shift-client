@@ -5,6 +5,7 @@ import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
 import { RiEBikeFill } from "react-icons/ri";
 import { SiGoogletasks } from "react-icons/si";
+import logoImg from "../assets/logo.png";
 // import { SiGoogletasks } from "react-icons/si";
 
 const DashboardLayout = () => {
@@ -53,8 +54,13 @@ const DashboardLayout = () => {
           <ul className="menu w-full grow">
             {/* List item */}
             <li>
+              <Link to="/">
+                <img src={logoImg} alt="" />{" "}
+              </Link>
+            </li>
+            <li>
               <Link
-                to="/"
+                to="/dashboard"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Homepage"
               >
